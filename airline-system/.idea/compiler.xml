@@ -7,17 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="payment-service" />
-        <module name="chekin-service" />
         <module name="flight-service" />
+        <module name="notification-service" />
         <module name="booking-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="checkin-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="booking-service" options="-parameters" />
-      <module name="chekin-service" options="-parameters" />
+      <module name="checkin-service" options="-parameters" />
       <module name="flight-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
     </option>
   </component>
