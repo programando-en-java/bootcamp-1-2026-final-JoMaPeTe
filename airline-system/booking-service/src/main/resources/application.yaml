@@ -1,3 +1,7 @@
 spring:
   application:
     name: booking-service
+external:
+  services:
+    flight-service:
+      url: http://localhost:8080 # Ajusta el puerto según tu configuración
