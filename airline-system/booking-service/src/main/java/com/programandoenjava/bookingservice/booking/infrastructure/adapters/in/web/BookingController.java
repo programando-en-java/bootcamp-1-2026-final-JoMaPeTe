@@ -28,10 +28,10 @@ public class BookingController {
         
         // Mapeamos a un DTO de respuesta
         BookingResponseDto response = new BookingResponseDto(
-                booking.getId().toString(),
-                booking.getFlightNumber(),
-                booking.getPassengerId(),
-                booking.getStatus()
+                booking.getId().value().toString(),      // Extraemos el UUID y lo hacemos String
+                booking.getFlightNumber().value(),       // Extraemos el String del vuelo
+                booking.getPassengerId().value(),         // Extraemos el Long del pasajero
+                booking.getStatus().name()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

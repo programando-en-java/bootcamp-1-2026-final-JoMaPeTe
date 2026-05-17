@@ -1,5 +1,6 @@
 package com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign;
 
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,5 +17,3 @@ public interface FlightClient {
     void updateFlightSeats(@PathVariable("flightNumber") String flightNumber, @RequestParam("quantity") int quantity);
 }
 
-// DTO interno para mapear la respuesta del flight-service
-record FlightExternalDto(String flightNumber, int availableSeats) {}

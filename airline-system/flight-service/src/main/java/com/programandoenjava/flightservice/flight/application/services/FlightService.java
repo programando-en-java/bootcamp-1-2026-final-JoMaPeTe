@@ -5,7 +5,7 @@ import com.programandoenjava.flightservice.flight.domain.port.in.ReserveSeatsUse
 import com.programandoenjava.flightservice.flight.domain.port.in.SearchFlightsCriteria;
 import com.programandoenjava.flightservice.flight.domain.port.in.SearchFlightsUseCase;
 import com.programandoenjava.flightservice.flight.domain.port.out.FlightRepositoryPort;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +31,15 @@ public class FlightService implements ReserveSeatsUseCase, SearchFlightsUseCase 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Flight> searchFlights(SearchFlightsCriteria criteria) {
         return flightRepositoryPort.search(criteria);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Flight findByFlightNumber(String flightNumber) {
+        return flightRepositoryPort.findByFlightNumber(flightNumber)
+                .orElseThrow(() -> new RuntimeException("El vuelo no existe"));
     }
 }

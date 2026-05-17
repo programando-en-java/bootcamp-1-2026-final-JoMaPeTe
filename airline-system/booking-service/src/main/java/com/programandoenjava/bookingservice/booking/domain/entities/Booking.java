@@ -1,49 +1,48 @@
 package com.programandoenjava.bookingservice.booking.domain.entities;
 
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingId;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingStatus;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.PassengerId;
+
 import java.util.UUID;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.*;
+
+
 
 public class Booking {
-    private UUID id;
-    private String flightNumber;
-    private Long passengerId;
-    private String status; // Aquí usaremos "PENDING" como pide la US-003
+        private final BookingId id;
+        private  FlightNumber flightNumber;
+        private  PassengerId passengerId;
+        private BookingStatus status;
 
-    public Booking(UUID id, String flightNumber, Long passengerId, String status) {
-        this.id = id;
-        this.flightNumber = flightNumber;
-        this.passengerId = passengerId;
+        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status) {
+            this.id = id;
+            this.flightNumber = flightNumber;
+            this.passengerId = passengerId;
+            this.status = status;
+        }
+
+        // Getters...
+        public BookingId getId() { return id; }
+        public FlightNumber getFlightNumber() { return flightNumber; }
+        public PassengerId getPassengerId() { return passengerId; }
+        public BookingStatus getStatus() { return status; }
+     // Aquí usaremos "PENDING" como pide la US-003
+
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
-    public UUID getId() {
-        return id;
-    }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getPassengerId() {
-        return passengerId;
-    }
-
-    public void setPassengerId(Long passengerId) {
+    public void setPassengerId(PassengerId passengerId) {
         this.passengerId = passengerId;
     }
 
-    public String getFlightNumber() {
-        return flightNumber;
-    }
 
-    public void setFlightNumber(String flightNumber) {
+
+    public void setFlightNumber(FlightNumber flightNumber) {
         this.flightNumber = flightNumber;
     }
 

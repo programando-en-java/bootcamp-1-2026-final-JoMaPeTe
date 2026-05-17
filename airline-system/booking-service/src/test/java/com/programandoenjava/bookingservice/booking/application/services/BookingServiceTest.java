@@ -1,9 +1,13 @@
 package com.programandoenjava.bookingservice.booking.application.services;
 
+import com.programandoenjava.bookingservice.booking.application.dto.BookingRequestDto;
 import com.programandoenjava.bookingservice.booking.domain.entities.Booking;
-import com.programandoenjava.bookingservice.booking.domain.entities.enums.BookingStatus;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingId;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingStatus;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.PassengerId;
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
-import com.programandoenjava.bookingservice.booking.infraestructure.feign.FlightClient; // Tu cliente Feign
+import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +20,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
@@ -25,7 +28,7 @@ class BookingServiceTest {
     private BookingRepositoryPort bookingRepository;
 
     @Mock
-    private FlightClient flightClient; // Para verificar el vuelo en el otro microservicio
+    private FlightServicePort flightServicePort; // Usamos el puerto, no el cliente Feign directamente
 
     @InjectMocks
     private BookingService bookingService;
@@ -36,18 +39,24 @@ class BookingServiceTest {
         // 1 Arrange
         String flightNumber = "IB123";
         Long passengerId = 45L;
-        Booking mockBooking = new Booking(UUID.randomUUID(), flightNumber, passengerId, BookingStatus.PENDING);
+        // Creamos el DTO porque ahora el servicio recibe DTO, no Strings
+        BookingRequestDto request = new BookingRequestDto( flightNumber,passengerId, 1);
 
+        Booking mockBooking = new Booking(new BookingId(UUID.randomUUID()),
+                new FlightNumber(flightNumber),
+                new PassengerId(passengerId),
+                BookingStatus.PENDING);
+
+        // Simulamos que hay asientos (US-004)
+        given(flightServicePort.hasAvailableSeats(any(), any(Integer.class))).willReturn(true);
         given(bookingRepository.save(any(Booking.class))).willReturn(mockBooking);
 
         // 2 Act
-        Booking result = bookingService.createBooking(flightNumber, passengerId);
+        Booking result = bookingService.createBooking(request);
 
         // 3 Assert
         assertThat(result).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(BookingStatus.PENDING); // Criterio de aceptación 3
-        assertThat(result.getFlightNumber()).isEqualTo(flightNumber);
-
-        verify(bookingRepository).save(any(Booking.class));
+        assertThat(result.getStatus()).isEqualTo(BookingStatus.PENDING);
+        assertThat(result.getFlightNumber().value()).isEqualTo(flightNumber);
     }
 }

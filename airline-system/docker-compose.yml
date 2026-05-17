@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: airline_db_prod
+    environment:
+      POSTGRES_DB: airline_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - airline-network
   flight-service:
     build:
       context: ./flight-service

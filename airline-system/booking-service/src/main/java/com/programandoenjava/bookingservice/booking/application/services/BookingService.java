@@ -2,6 +2,10 @@ package com.programandoenjava.bookingservice.booking.application.services;
 
 import com.programandoenjava.bookingservice.booking.application.dto.BookingRequestDto;
 import com.programandoenjava.bookingservice.booking.domain.entities.Booking;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingId;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingStatus;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
+import com.programandoenjava.bookingservice.booking.domain.entities.vo.PassengerId;
 import com.programandoenjava.bookingservice.booking.domain.exceptions.OverbookingException;
 import com.programandoenjava.bookingservice.booking.domain.port.in.CreateBookingUseCase;
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
@@ -22,15 +26,15 @@ public class BookingService implements CreateBookingUseCase {
     @Transactional
     public Booking createBooking(BookingRequestDto request) {
         // Lógica US-004: Validar disponibilidad a través del puerto
-        if (!flightServicePort.hasAvailableSeats(request.flightNumber(), request.seats())) {
-            throw new OverbookingException();
+        if (!flightServicePort.hasAvailableSeats(new FlightNumber(request.flightNumber()), request.seats())) {
+            throw new OverbookingException("Error");
         }
 
         // Crear la reserva en estado PENDING
-        Booking booking = new Booking(UUID.randomUUID(), request.flightNumber(), request.passengerId(), "PENDING");
+        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING);
 
         // Confirmar reserva de asientos en el otro microservicio
-        flightServicePort.reserveSeats(request.flightNumber(), request.seats());
+        flightServicePort.reserveSeats(new FlightNumber(request.flightNumber()), request.seats());
 
         return bookingRepository.save(booking);
     }

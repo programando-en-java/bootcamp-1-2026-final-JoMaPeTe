@@ -1,4 +1,4 @@
-package com.programandoenjava.flightservice.flight.infrastructure.config;
+package com.programandoenjava.bookingservice.booking.infrastructure.config;
 
 import feign.Logger;
 import feign.Request;
