@@ -47,7 +47,8 @@ class BookingControllerTest {
         Booking booking = new Booking(new BookingId(id),                    // Envolvemos el UUID 'id'
                 new FlightNumber("IB123"),            // Envolvemos el String
                 new PassengerId(1L),                  // Envolvemos el Long
-                BookingStatus.CONFIRMED);
+                BookingStatus.CONFIRMED,
+                2);
         given(bookingService.createBooking(any())).willReturn(booking);
 
         BookingRequestDto request = new BookingRequestDto(  "IB123", 1L, 2);

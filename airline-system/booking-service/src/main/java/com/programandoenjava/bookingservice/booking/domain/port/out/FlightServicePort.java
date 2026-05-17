@@ -5,4 +5,5 @@ import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNum
 public interface FlightServicePort {
     boolean hasAvailableSeats(FlightNumber flightNumber, int requestedSeats);
     void reserveSeats(FlightNumber flightNumber, int seats);
+    void cancelReserve(FlightNumber flightNumber, Integer quantity);
 }

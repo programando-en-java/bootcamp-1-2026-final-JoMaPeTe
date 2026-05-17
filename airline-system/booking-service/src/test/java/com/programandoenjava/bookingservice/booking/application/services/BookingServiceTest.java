@@ -45,7 +45,8 @@ class BookingServiceTest {
         Booking mockBooking = new Booking(new BookingId(UUID.randomUUID()),
                 new FlightNumber(flightNumber),
                 new PassengerId(passengerId),
-                BookingStatus.PENDING);
+                BookingStatus.PENDING,
+                request.seats());
 
         // Simulamos que hay asientos (US-004)
         given(flightServicePort.hasAvailableSeats(any(), any(Integer.class))).willReturn(true);

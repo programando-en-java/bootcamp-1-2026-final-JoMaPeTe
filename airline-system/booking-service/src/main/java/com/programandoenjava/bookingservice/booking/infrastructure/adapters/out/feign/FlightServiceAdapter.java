@@ -2,7 +2,7 @@ package com.programandoenjava.bookingservice.booking.infrastructure.adapters.out
 
 import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
 import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
-import org.springframework.stereotype.Component;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.FlightExternalDto;
 
 
 public class FlightServiceAdapter implements FlightServicePort {
@@ -22,5 +22,10 @@ public class FlightServiceAdapter implements FlightServicePort {
     @Override
     public void reserveSeats(FlightNumber flightNumber, int seats) {
         flightClient.updateFlightSeats(flightNumber.value(), seats);
+    }
+
+    public void cancelReserve(FlightNumber flightNumber, Integer seats) {
+        // Llamada Feign al nuevo POST /cancel-reserve
+        flightClient.cancelReserve(flightNumber.value(), seats);
     }
 }
