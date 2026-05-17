@@ -54,7 +54,7 @@ class BookingControllerTest {
                 150L);
         given(bookingService.createBooking(any())).willReturn(booking);
 
-        BookingRequestDto request = new BookingRequestDto(  "IB123", 1L, 2);
+        BookingRequestDto request = new BookingRequestDto(  "IB123", 1L, "test@test.com",2);
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/bookings")
@@ -74,7 +74,7 @@ class BookingControllerTest {
         given(bookingService.createBooking(any()))
                 .willThrow(new RuntimeException("No hay asientos disponibles"));
 
-        BookingRequestDto request = new BookingRequestDto("IB123", 1L, 2);
+        BookingRequestDto request = new BookingRequestDto("IB123", 1L, "test@test.com",2);
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/bookings")

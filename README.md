@@ -284,14 +284,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iL
 
 ###
 POST http://localhost:8080/api/v1/bookings
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTA0MDA0NywiaWF0IjoxNzc5MDM5Njg3LCJyb2xlcyI6WyJBRE1JTiJdfQ.27w7V4xxG-ri_sd6NqeLVCVz1rYmKcN0AsRDpYiIDHg
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
+Content-Type: application/json
 
 {
 "flightNumber": "IB3040",
 "passengerId": 1,
-"seats": 1
+"passengerEmail": "test@test.com",
+"seats": 2
 }
+
 ###
 POST http://localhost:8080/api/v1/payments
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
@@ -303,10 +305,10 @@ Content-Type: application/json
 "amount": 150.00
 }
 ###
-POST http://localhost:8080/api/v1/bookings/218ca048-5b47-464b-a25e-735fbed2e214/pay
+POST http://localhost:8080/api/v1/bookings/d60a924f-1f2a-4cd9-b4e8-5a86ef94d058/pay
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
 Content-Type: application/json
 
 {
-"userEmail": "usuario_admin@airline.com"
+"userEmail": "test@test.com"
 }
