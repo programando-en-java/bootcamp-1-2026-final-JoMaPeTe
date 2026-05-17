@@ -29,7 +29,8 @@ public class BookingPersistenceAdapter implements BookingRepositoryPort {
             booking.getFlightNumber().value(),
             booking.getPassengerId().value(),
             booking.getStatus().name(),
-                booking.getSeats()
+                booking.getSeats(),
+                booking.getTotalPrice()
         );
         
         BookingEntity savedEntity = jpaRepository.save(entity);
@@ -40,7 +41,8 @@ public class BookingPersistenceAdapter implements BookingRepositoryPort {
                 new FlightNumber(savedEntity.getFlightNumber()),  // Envolvemos el String
                 new PassengerId(savedEntity.getPassengerId()),    // Envolvemos el Long
                 BookingStatus.valueOf(savedEntity.getStatus()),
-                savedEntity.getSeats()
+                savedEntity.getSeats(),
+                savedEntity.getTotalPrice()
         );
     }
 
@@ -55,7 +57,8 @@ public class BookingPersistenceAdapter implements BookingRepositoryPort {
                         new PassengerId(entity.getPassengerId()),
                         // Usamos el constructor/estado adecuado
                         BookingStatus.valueOf(entity.getStatus()),
-                        entity.getSeats()
+                        entity.getSeats(),
+                        entity.getTotalPrice()
                 ));
     }
 }

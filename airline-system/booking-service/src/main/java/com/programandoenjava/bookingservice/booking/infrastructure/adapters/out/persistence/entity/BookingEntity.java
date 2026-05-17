@@ -9,12 +9,21 @@ import java.util.UUID;
 @Table(name = "bookings")
 public class BookingEntity {
 
-    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status, Integer seats) {
+    public Long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status, Integer seats, Long totalPrice) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.passengerId = passengerId;
         this.status = status;
         this.seats = seats;
+        this.totalPrice = totalPrice;
     }
 
     public UUID getId() {
@@ -63,7 +72,8 @@ public class BookingEntity {
     private String status; // Guardará "PENDING" inicialmente
     @Column(name = "seats") // Opcional, JPA lo hace por defecto
     private Integer seats;
-
+    @Column(name = "total_price")
+    private Long totalPrice;
     public BookingEntity() {}
 
 }

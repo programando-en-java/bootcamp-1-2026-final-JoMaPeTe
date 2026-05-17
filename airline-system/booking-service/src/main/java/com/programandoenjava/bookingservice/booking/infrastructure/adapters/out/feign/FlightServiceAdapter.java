@@ -28,4 +28,10 @@ public class FlightServiceAdapter implements FlightServicePort {
         // Llamada Feign al nuevo POST /cancel-reserve
         flightClient.cancelReserve(flightNumber.value(), seats);
     }
+
+    @Override
+    public long getFlightPrice(FlightNumber flightNumber) {
+       FlightExternalDto flight= flightClient.getFlightByNumber(flightNumber.value());
+       return flight.price();
+    }
 }

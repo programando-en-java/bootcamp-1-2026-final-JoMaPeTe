@@ -11,6 +11,7 @@ import com.programandoenjava.bookingservice.booking.domain.entities.vo.Passenger
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookingController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class BookingControllerTest {
 
     @Autowired
@@ -48,7 +50,8 @@ class BookingControllerTest {
                 new FlightNumber("IB123"),            // Envolvemos el String
                 new PassengerId(1L),                  // Envolvemos el Long
                 BookingStatus.CONFIRMED,
-                2);
+                2,
+                150L);
         given(bookingService.createBooking(any())).willReturn(booking);
 
         BookingRequestDto request = new BookingRequestDto(  "IB123", 1L, 2);

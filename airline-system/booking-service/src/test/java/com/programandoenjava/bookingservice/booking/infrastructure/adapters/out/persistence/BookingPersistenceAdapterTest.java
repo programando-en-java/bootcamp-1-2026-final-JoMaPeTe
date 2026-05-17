@@ -38,7 +38,8 @@ class BookingPersistenceAdapterTest {
                 new FlightNumber("IB123"),
                 new PassengerId(1L),
                 BookingStatus.PENDING,
-                1
+                1,
+                150L
         );
 
         BookingEntity entity = new BookingEntity();

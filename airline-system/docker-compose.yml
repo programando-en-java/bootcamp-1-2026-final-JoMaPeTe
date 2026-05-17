@@ -67,6 +67,29 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
 
+  iam-service:
+    build:
+      context: ./iam-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    networks:
+      - airline-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev # Para que use H2 localmente si no quieres Docker-Postgres aún
+
+  apigateway:
+    build:
+      context: ./apigateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - airline-network
+    depends_on:
+      - iam-service
+
 networks:
   airline-network:
     driver: bridge
+

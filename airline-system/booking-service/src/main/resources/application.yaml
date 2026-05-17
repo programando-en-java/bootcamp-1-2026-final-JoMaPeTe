@@ -13,3 +13,6 @@ external:
   services:
     flight-service:
       url: http://localhost:8081 # Ajusta el puerto según tu configuración
+gateway:
+  internal:
+    token: "SuperSecretGatewayToken2026"

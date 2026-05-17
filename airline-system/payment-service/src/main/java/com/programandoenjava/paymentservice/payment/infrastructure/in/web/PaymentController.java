@@ -27,7 +27,8 @@ public class PaymentController {
                 "MockProcessor MVP",
                 request.amount(),
                 request.userEmail(),
-                isSuccess
+                isSuccess,
+                request.bookingId()
         );
 
         return ResponseEntity.ok(response);

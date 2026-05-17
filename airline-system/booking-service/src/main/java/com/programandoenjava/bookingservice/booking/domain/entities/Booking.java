@@ -16,12 +16,14 @@ public class Booking {
         private  PassengerId passengerId;
         private BookingStatus status;
          private Integer seats;
-        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status, Integer seats) {
+         private Long totalPrice;
+        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status, Integer seats, Long totalPrice) {
             this.id = id;
             this.flightNumber = flightNumber;
             this.passengerId = passengerId;
             this.status = status;
             this.seats = seats;
+            this.totalPrice = totalPrice;
         }
 
         // Getters...
@@ -38,6 +40,12 @@ public class Booking {
     public void setFlightNumber(FlightNumber flightNumber) {
         this.flightNumber = flightNumber;
     }
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
     public Integer getSeats() {
         return seats;
     }
@@ -47,5 +55,10 @@ public class Booking {
 
     public void cancel() {
         this.status = BookingStatus.CANCELLED;
+    }
+
+    public Long getTotalPrice() {
+
+        return totalPrice;
     }
 }

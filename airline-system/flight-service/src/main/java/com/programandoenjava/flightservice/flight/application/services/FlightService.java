@@ -6,7 +6,6 @@ import com.programandoenjava.flightservice.flight.domain.port.in.SearchFlightsCr
 import com.programandoenjava.flightservice.flight.domain.port.in.SearchFlightsUseCase;
 import com.programandoenjava.flightservice.flight.domain.port.out.FlightRepositoryPort;
 import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.stereotype.Service;
 
 import java.util.List;
 
