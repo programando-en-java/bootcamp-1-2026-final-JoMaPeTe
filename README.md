@@ -205,12 +205,6 @@ Al completar este proyecto serás capaz de:
 GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN&date=2026-05-20
 Authorization: Basic admin bootcamp2026
 
-<> 2026-05-16T120625.200.json
-<> 2026-05-16T115817.200.json
-<> 2026-05-16T115425.200.json
-<> 2026-05-16T115011.200.json
-<> 2026-05-16T114332.200.json
-<> 2026-05-15T232926.200.json
 
 ###
 GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN&date=2026-05-20
@@ -222,16 +216,7 @@ POST http://localhost:8080/api/v1/flights/FR098/reserve?
 quantity=500
 Authorization: Basic admin bootcamp2026
 
-<> 2026-05-16T120652.500.json
-<> 2026-05-16T115845.500.json
-<> 2026-05-16T115016.200.json
 
-<> 2026-05-16T114404.200.json
-<> 2026-05-16T114344.500.json
-<> 2026-05-15T235606.200.json
-<> 2026-05-15T235550.400.json
-<> 2026-05-15T234340.400.json
-<> 2026-05-15T234246.404.json
 ###
 POST http://localhost:8082/api/v1/bookings
 Content-Type: application/json
@@ -241,4 +226,79 @@ Authorization: Basic admin bootcamp2026
 "flightNumber": "IB3040",
 "passengerId": 1,
 "seats": 1
+}
+# TRAS IMPLEMENTAR APIGETWAY & IAM ESTO NO DEJA ENTRAR COMO NO SEA POR APIGETWAY QUE ES EL 8080
+GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN
+
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer
+
+GET http://localhost:8081/api/v1/flights/search?origin=MAD&destination=BCN
+
+HTTP/1.1 403
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Content-Type: application/json;charset=ISO-8859-1
+Content-Length: 108
+Date: Sun, 17 May 2026 17:36:56 GMT
+
+{
+"error": "Missing X-Gateway-Token",
+"message": "This microservice requires requests from API Gateway only"
+}
+
+### Ruta feliz AUTH
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+"username": "usuario_admin",
+"password": "1234"
+}
+HTTP/1.1 200 OK
+transfer-encoding: chunked
+
+
+{
+"token": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTA0MDA0NywiaWF0IjoxNzc5MDM5Njg3LCJyb2xlcyI6WyJBRE1JTiJdfQ.27w7V4xxG-ri_sd6NqeLVCVz1rYmKcN0AsRDpYiIDHg"
+}
+
+GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTA0MDA0NywiaWF0IjoxNzc5MDM5Njg3LCJyb2xlcyI6WyJBRE1JTiJdfQ.27w7V4xxG-ri_sd6NqeLVCVz1rYmKcN0AsRDpYiIDHg
+
+
+[
+{
+"id": 3,
+"flightNumber": "FR098",
+"origin": "MAD",
+"destination": "BCN",
+"departureTime": "2026-05-20T08:00:00",
+"price": 50,
+"availableSeats": 180
+}
+]
+
+###
+POST http://localhost:8080/api/v1/bookings
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTA0MDA0NywiaWF0IjoxNzc5MDM5Njg3LCJyb2xlcyI6WyJBRE1JTiJdfQ.27w7V4xxG-ri_sd6NqeLVCVz1rYmKcN0AsRDpYiIDHg
+
+
+{
+"flightNumber": "IB3040",
+"passengerId": 1,
+"seats": 1
+}
+###
+POST http://localhost:8080/api/v1/payments
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
+Content-Type: application/json
+
+{
+"bookingId": "7c80b0f3-8532-4678-88dd-20c7d58212e1",
+"userEmail": "usuario_admin@airline.com",
+"amount": 150.00
 }

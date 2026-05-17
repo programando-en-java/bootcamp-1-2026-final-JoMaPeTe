@@ -2,19 +2,22 @@ package com.programandoenjava.flightservice.flight.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final GatewayTokenFilter gatewayTokenFilter;
+
+    public SecurityConfig(GatewayTokenFilter gatewayTokenFilter) {
+        this.gatewayTokenFilter = gatewayTokenFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -23,21 +26,14 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated() // Cambiamos permitAll por authenticated
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Activamos la autenticación Basic
+                //  IMPORTANTE: Añadimos el filtro del Portero
+                .addFilterBefore(gatewayTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        //  BORRADO: .httpBasic(...) -> ¡Ya no queremos entrar por la puerta de atrás!
 
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        // Aquí definimos la credencial fija que mencionas
-        UserDetails user = User.builder()
-                .username("admin")
-                .password("{noop}bootcamp2026") // {noop} indica que no hay encriptación para pruebas
-                .roles("ADMIN") // El rol ADMIN que pide el MVP
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+    //  BORRADO: userDetailsService() -> El microservicio ya no necesita conocer contraseñas
 }

@@ -4,7 +4,7 @@ import com.programandoenjava.bookingservice.booking.application.dto.BookingReque
 import com.programandoenjava.bookingservice.booking.application.dto.BookingResponseDto;
 import com.programandoenjava.bookingservice.booking.application.services.BookingService;
 import com.programandoenjava.bookingservice.booking.domain.entities.Booking;
-import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentRequestDto;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.in.web.dto.PaymentRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,8 @@ public class BookingController {
                 booking.getId().value().toString(),      // Extraemos el UUID y lo hacemos String
                 booking.getFlightNumber().value(),       // Extraemos el String del vuelo
                 booking.getPassengerId().value(),         // Extraemos el Long del pasajero
-                booking.getStatus().name()
+                booking.getStatus().name(),
+                booking.getTotalPrice()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

@@ -12,11 +12,10 @@ import com.programandoenjava.bookingservice.booking.domain.port.in.CreateBooking
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
 import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
 import java.util.UUID;
-
 import com.programandoenjava.bookingservice.booking.domain.port.out.PaymentServicePort;
-import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentRequestDto;
-import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentResponseDto;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.in.web.dto.PaymentRequestDto;
 import jakarta.transaction.Transactional;
+
 public class BookingService implements CreateBookingUseCase {
     private final BookingRepositoryPort bookingRepositoryPort;
     private final FlightServicePort flightServicePort; // Puerto para hablar con Flight-Service
@@ -35,9 +34,10 @@ public class BookingService implements CreateBookingUseCase {
         if (!flightServicePort.hasAvailableSeats(new FlightNumber(request.flightNumber()), request.seats())) {
             throw new OverbookingException("Error");
         }
-
+        Long pricePerSeat= flightServicePort.getFlightPrice(new FlightNumber(request.flightNumber()));
+        Long totalPrice= pricePerSeat*request.seats();
         // Crear la reserva en estado PENDING
-        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING, request.seats());
+        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING, request.seats(), totalPrice);
 
         // Confirmar reserva de asientos en el otro microservicio
         flightServicePort.reserveSeats(new FlightNumber(request.flightNumber()), request.seats());
@@ -54,7 +54,7 @@ public class BookingService implements CreateBookingUseCase {
 
         try {
             // 1. Intentamos cobrar llamando al payment-service (US-005)
-            boolean isSuccess = paymentServicePort.processPayment(paymentRequest.userEmail(), paymentRequest.amount());
+            boolean isSuccess = paymentServicePort.processPayment( booking.getId().value().toString(), paymentRequest.userEmail(), booking.getTotalPrice());
 
             // 2. Si el pago devuelve true, confirmamos
             if (isSuccess) {
@@ -63,7 +63,10 @@ public class BookingService implements CreateBookingUseCase {
                 return new BookingResponseDto(booking.getId().value().toString(),
                         booking.getFlightNumber().value(),
                         booking.getPassengerId().value(),
-                        booking.getStatus().name() );
+                        booking.getStatus().name(),
+                        booking.getTotalPrice()
+
+                );
             } else {
                 // Forzamos el fallo para ir al catch
                 throw new RuntimeException("El proveedor rechazó el pago");

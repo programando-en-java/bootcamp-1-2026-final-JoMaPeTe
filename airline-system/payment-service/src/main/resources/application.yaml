@@ -3,3 +3,7 @@ spring:
     name: payment-services
 server:
   port: 8083 # El puerto de PaymentClient
+
+gateway:
+  internal:
+    token: "SuperSecretGatewayToken2026"

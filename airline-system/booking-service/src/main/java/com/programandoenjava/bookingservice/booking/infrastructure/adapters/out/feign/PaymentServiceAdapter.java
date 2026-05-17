@@ -16,9 +16,9 @@ public class PaymentServiceAdapter implements PaymentServicePort {
     }
 
     @Override
-    public boolean processPayment(String userEmail, Long amount) {
+    public boolean processPayment(String bookingId, String userEmail, Long amount) {
         // 1. Traducimos los datos del dominio al DTO de Feign
-        PaymentRequestDto request = new PaymentRequestDto(userEmail, amount);
+        PaymentRequestDto request = new PaymentRequestDto(bookingId, userEmail, amount);
         
         // 2. Hacemos la llamada real al microservicio
         PaymentResponseDto response = paymentClient.process(request);
