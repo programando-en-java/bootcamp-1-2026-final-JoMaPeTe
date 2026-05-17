@@ -8,12 +8,14 @@ import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNum
 import com.programandoenjava.bookingservice.booking.domain.entities.vo.PassengerId;
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
 import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
 
@@ -23,7 +25,8 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
-
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
     @Mock
     private BookingRepositoryPort bookingRepository;
 
@@ -32,7 +35,11 @@ class BookingServiceTest {
 
     @InjectMocks
     private BookingService bookingService;
-
+    @BeforeEach
+    void setUp() {
+        // Así te aseguras de que el servicio SIEMPRE tiene el publisher inyectado
+        bookingService.setApplicationEventPublisher(eventPublisher);
+    }
     @Test
     @DisplayName("Should create a booking with PENDING status")
     void createBooking_ShouldStartAsPending() {
@@ -40,8 +47,7 @@ class BookingServiceTest {
         String flightNumber = "IB123";
         Long passengerId = 45L;
         // Creamos el DTO porque ahora el servicio recibe DTO, no Strings
-        BookingRequestDto request = new BookingRequestDto( flightNumber,passengerId, 1);
-
+        BookingRequestDto request = new BookingRequestDto( flightNumber,passengerId,"test@test.com", 1);
         Booking mockBooking = new Booking(new BookingId(UUID.randomUUID()),
                 new FlightNumber(flightNumber),
                 new PassengerId(passengerId),
