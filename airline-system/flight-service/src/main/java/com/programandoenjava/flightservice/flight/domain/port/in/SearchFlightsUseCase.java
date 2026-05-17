@@ -9,4 +9,6 @@ public interface SearchFlightsUseCase {
     // Devuelve una lista de entidades de dominio
     // SearchFlightsCriteria está bien aquí, siempre que sea una clase/record definida dentro de 'domain'
     List<Flight> searchFlights(SearchFlightsCriteria criteria);
+
+    Flight findByFlightNumber(String flightNumber);
 }

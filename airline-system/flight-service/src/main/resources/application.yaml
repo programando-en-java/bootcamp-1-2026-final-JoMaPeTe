@@ -1,6 +1,13 @@
+server:
+  port: 8081
 spring:
   application:
     name: flight-service
+  docker:
+    compose:
+      enabled: false
+      file: airline-system/docker-compose.yaml
+
   security:
     user:
       name: admin

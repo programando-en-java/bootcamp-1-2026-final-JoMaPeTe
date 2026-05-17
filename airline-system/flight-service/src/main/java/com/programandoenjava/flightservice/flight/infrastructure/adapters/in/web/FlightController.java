@@ -56,5 +56,14 @@ public class FlightController {
         // Traducimos la entidad actualizada a DTO y la devolvemos
         return ResponseEntity.ok(FlightDto.fromDomain(updatedFlight));
     }
+    @GetMapping("/{flightNumber}")
+    public ResponseEntity<FlightDto> getFlightByNumber(@PathVariable String flightNumber) {
 
+        Flight flight = searchFlightsUseCase.findByFlightNumber(flightNumber);
+        if (flight == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // 2. Si el dominio devuelve el vuelo, lo pasamos a DTO
+        return ResponseEntity.ok(FlightDto.fromDomain(flight));
+    }
 }

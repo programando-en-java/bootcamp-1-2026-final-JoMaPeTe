@@ -1,3 +1,3 @@
 spring:
   application:
-    name: chekin-service
+    name: chekin-services

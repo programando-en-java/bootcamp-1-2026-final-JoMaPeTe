@@ -200,3 +200,45 @@ Al completar este proyecto serás capaz de:
 * Implementar patrones de arquitectura usados en producción
 * Tener un proyecto sólido para tu portfolio
 
+### REQUESTS PRUEBA
+##
+GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN&date=2026-05-20
+Authorization: Basic admin bootcamp2026
+
+<> 2026-05-16T120625.200.json
+<> 2026-05-16T115817.200.json
+<> 2026-05-16T115425.200.json
+<> 2026-05-16T115011.200.json
+<> 2026-05-16T114332.200.json
+<> 2026-05-15T232926.200.json
+
+###
+GET http://localhost:8080/api/v1/flights/search?origin=MAD&destination=BCN&date=2026-05-20
+Authorization: Basic admin bootcamp2026
+
+
+###
+POST http://localhost:8080/api/v1/flights/FR098/reserve?
+quantity=500
+Authorization: Basic admin bootcamp2026
+
+<> 2026-05-16T120652.500.json
+<> 2026-05-16T115845.500.json
+<> 2026-05-16T115016.200.json
+
+<> 2026-05-16T114404.200.json
+<> 2026-05-16T114344.500.json
+<> 2026-05-15T235606.200.json
+<> 2026-05-15T235550.400.json
+<> 2026-05-15T234340.400.json
+<> 2026-05-15T234246.404.json
+###
+POST http://localhost:8082/api/v1/bookings
+Content-Type: application/json
+Authorization: Basic admin bootcamp2026
+
+{
+"flightNumber": "IB3040",
+"passengerId": 1,
+"seats": 1
+}
