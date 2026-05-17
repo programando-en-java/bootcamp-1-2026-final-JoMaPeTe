@@ -66,4 +66,13 @@ public class FlightController {
         // 2. Si el dominio devuelve el vuelo, lo pasamos a DTO
         return ResponseEntity.ok(FlightDto.fromDomain(flight));
     }
+    @PostMapping("/{flightNumber}/cancel-reserve")
+    public ResponseEntity<Void> cancelReserve(
+            @PathVariable String flightNumber,
+            @RequestParam Integer quantity) {
+
+        // Este caso de uso hará el "quantity * -1" o sumará los asientos
+        reserveSeatsUseCase.cancelReservation(flightNumber, quantity);
+        return ResponseEntity.noContent().build();
+    }
 }

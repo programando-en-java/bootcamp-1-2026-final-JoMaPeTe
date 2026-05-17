@@ -31,6 +31,17 @@ public class FlightService implements ReserveSeatsUseCase, SearchFlightsUseCase 
     }
 
     @Override
+    @Transactional
+    public void cancelReservation(String flightNumber, Integer quantity) {
+        Flight flight = flightRepositoryPort.findByFlightNumber(flightNumber)
+                .orElseThrow(() -> new RuntimeException("El vuelo no existe"));
+
+        flight.releaseSeats(quantity);
+
+        flightRepositoryPort.guardar(flight);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Flight> searchFlights(SearchFlightsCriteria criteria) {
         return flightRepositoryPort.search(criteria);

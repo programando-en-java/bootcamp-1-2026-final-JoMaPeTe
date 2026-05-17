@@ -4,6 +4,7 @@ import com.programandoenjava.bookingservice.booking.application.services.Booking
 import com.programandoenjava.bookingservice.booking.domain.port.in.CreateBookingUseCase;
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
 import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
+import com.programandoenjava.bookingservice.booking.domain.port.out.PaymentServicePort;
 import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.FlightClient;
 import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.FlightServiceAdapter;
 import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.persistence.BookingPersistenceAdapter;
@@ -28,8 +29,8 @@ public class AdaptersConfig {
     // 3. El Servicio de Aplicación (Domain Service)
     // Aquí es donde inyectas los dos puertos definidos arriba
     @Bean
-    public BookingService BookingService(BookingRepositoryPort repo, FlightServicePort flightPort) {
-        return new BookingService(repo, flightPort);
+    public BookingService BookingService(BookingRepositoryPort repo, FlightServicePort flightPort, PaymentServicePort paymentPort) {
+        return new BookingService(repo, flightPort, paymentPort);
     }
 
     // 4. Exponer los Casos de Uso (Puertos de Entrada)

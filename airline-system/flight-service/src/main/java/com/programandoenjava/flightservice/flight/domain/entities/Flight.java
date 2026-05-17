@@ -89,4 +89,6 @@ public class Flight {
     public Integer getAvailableSeats() {
         return availableSeats;
     }
+
+
 }

@@ -9,11 +9,12 @@ import java.util.UUID;
 @Table(name = "bookings")
 public class BookingEntity {
 
-    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status) {
+    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status, Integer seats) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.passengerId = passengerId;
         this.status = status;
+        this.seats = seats;
     }
 
     public UUID getId() {
@@ -47,7 +48,8 @@ public class BookingEntity {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    public Integer getSeats() { return seats;}
+    public void setSeats(Integer seats) { this.seats = seats;}
     @Id
     private UUID id;
 
@@ -59,7 +61,8 @@ public class BookingEntity {
 
     @Column(nullable = false)
     private String status; // Guardará "PENDING" inicialmente
-
+    @Column(name = "seats") // Opcional, JPA lo hace por defecto
+    private Integer seats;
 
     public BookingEntity() {}
 

@@ -37,7 +37,8 @@ class BookingPersistenceAdapterTest {
                 new BookingId(UUID.randomUUID()),
                 new FlightNumber("IB123"),
                 new PassengerId(1L),
-                BookingStatus.PENDING
+                BookingStatus.PENDING,
+                1
         );
 
         BookingEntity entity = new BookingEntity();
@@ -45,6 +46,7 @@ class BookingPersistenceAdapterTest {
         entity.setFlightNumber("IB123");
         entity.setStatus("PENDING");
         entity.setPassengerId(1L);
+        entity.setSeats(1);
         when(jpaRepository.save(any(BookingEntity.class))).thenReturn(entity);
 
         // Act

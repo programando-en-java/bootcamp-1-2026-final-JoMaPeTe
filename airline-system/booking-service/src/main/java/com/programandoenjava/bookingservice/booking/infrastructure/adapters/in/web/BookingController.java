@@ -4,12 +4,10 @@ import com.programandoenjava.bookingservice.booking.application.dto.BookingReque
 import com.programandoenjava.bookingservice.booking.application.dto.BookingResponseDto;
 import com.programandoenjava.bookingservice.booking.application.services.BookingService;
 import com.programandoenjava.bookingservice.booking.domain.entities.Booking;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -35,6 +33,19 @@ public class BookingController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PostMapping("/{id}/pay")
+    public ResponseEntity<BookingResponseDto> payBooking(
+            @PathVariable String id,
+            @RequestBody PaymentRequestDto paymentRequest) {
+
+        // Llamamos al orquestador que hemos construido
+        BookingResponseDto response = bookingService.payBooking(
+                id,
+                paymentRequest
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.programandoenjava.bookingservice.booking.application.services;
 
 import com.programandoenjava.bookingservice.booking.application.dto.BookingRequestDto;
+import com.programandoenjava.bookingservice.booking.application.dto.BookingResponseDto;
 import com.programandoenjava.bookingservice.booking.domain.entities.Booking;
 import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingId;
 import com.programandoenjava.bookingservice.booking.domain.entities.vo.BookingStatus;
@@ -11,15 +12,20 @@ import com.programandoenjava.bookingservice.booking.domain.port.in.CreateBooking
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
 import com.programandoenjava.bookingservice.booking.domain.port.out.FlightServicePort;
 import java.util.UUID;
+
+import com.programandoenjava.bookingservice.booking.domain.port.out.PaymentServicePort;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentRequestDto;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.PaymentResponseDto;
 import jakarta.transaction.Transactional;
 public class BookingService implements CreateBookingUseCase {
-    private final BookingRepositoryPort bookingRepository;
+    private final BookingRepositoryPort bookingRepositoryPort;
     private final FlightServicePort flightServicePort; // Puerto para hablar con Flight-Service
+    private final PaymentServicePort paymentServicePort;
 
-    public BookingService(BookingRepositoryPort bookingRepository, FlightServicePort flightServicePort) {
-
-        this.bookingRepository = bookingRepository;
+    public BookingService(BookingRepositoryPort bookingRepository, FlightServicePort flightServicePort, PaymentServicePort paymentServicePort) {
+        this.bookingRepositoryPort = bookingRepository;
         this.flightServicePort = flightServicePort;
+        this.paymentServicePort = paymentServicePort;
     }
 
 
@@ -31,11 +37,50 @@ public class BookingService implements CreateBookingUseCase {
         }
 
         // Crear la reserva en estado PENDING
-        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING);
+        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING, request.seats());
 
         // Confirmar reserva de asientos en el otro microservicio
         flightServicePort.reserveSeats(new FlightNumber(request.flightNumber()), request.seats());
 
-        return bookingRepository.save(booking);
+        return bookingRepositoryPort.save(booking);
+    }
+    @Transactional
+    public BookingResponseDto payBooking(String bookingIdString, PaymentRequestDto paymentRequest) {
+        // Convertimos el String a UUID (o el tipo de ID que uses) y buscamos la reserva
+
+        UUID bookingId = UUID.fromString(bookingIdString);
+        Booking booking = bookingRepositoryPort.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        try {
+            // 1. Intentamos cobrar llamando al payment-service (US-005)
+            boolean isSuccess = paymentServicePort.processPayment(paymentRequest.userEmail(), paymentRequest.amount());
+
+            // 2. Si el pago devuelve true, confirmamos
+            if (isSuccess) {
+                booking.confirm();
+                bookingRepositoryPort.save(booking);
+                return new BookingResponseDto(booking.getId().value().toString(),
+                        booking.getFlightNumber().value(),
+                        booking.getPassengerId().value(),
+                        booking.getStatus().name() );
+            } else {
+                // Forzamos el fallo para ir al catch
+                throw new RuntimeException("El proveedor rechazó el pago");
+            }
+
+        } catch (Exception e) {
+            // 3. ¡COMPENSACIÓN! (US-006)
+
+            // A. Cancelamos la reserva localmente
+            booking.cancel();
+            bookingRepositoryPort.save(booking);
+
+            // B. Llamamos al flight-service para liberar las plazas
+            flightServicePort.cancelReserve(booking.getFlightNumber(), booking.getSeats());
+
+            // C. Avisamos al usuario del problema
+            throw new RuntimeException("Pago fallido. Reserva cancelada y plazas liberadas. Detalle: " + e.getMessage());
+        }
     }
 }

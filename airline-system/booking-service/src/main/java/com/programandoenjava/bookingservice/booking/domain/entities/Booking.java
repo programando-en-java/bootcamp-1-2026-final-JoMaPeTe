@@ -15,12 +15,13 @@ public class Booking {
         private  FlightNumber flightNumber;
         private  PassengerId passengerId;
         private BookingStatus status;
-
-        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status) {
+         private Integer seats;
+        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status, Integer seats) {
             this.id = id;
             this.flightNumber = flightNumber;
             this.passengerId = passengerId;
             this.status = status;
+            this.seats = seats;
         }
 
         // Getters...
@@ -30,20 +31,21 @@ public class Booking {
         public BookingStatus getStatus() { return status; }
      // Aquí usaremos "PENDING" como pide la US-003
 
-    public void setStatus(BookingStatus status) {
-        this.status = status;
-    }
-
-
-
     public void setPassengerId(PassengerId passengerId) {
         this.passengerId = passengerId;
     }
 
-
-
     public void setFlightNumber(FlightNumber flightNumber) {
         this.flightNumber = flightNumber;
     }
+    public Integer getSeats() {
+        return seats;
+    }
+    public void confirm() {
+        this.status = BookingStatus.CONFIRMED;
+    }
 
+    public void cancel() {
+        this.status = BookingStatus.CANCELLED;
+    }
 }

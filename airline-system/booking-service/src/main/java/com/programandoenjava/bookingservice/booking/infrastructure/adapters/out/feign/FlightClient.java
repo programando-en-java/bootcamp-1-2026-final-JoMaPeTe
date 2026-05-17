@@ -1,7 +1,7 @@
 package com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign;
 
 import com.programandoenjava.bookingservice.booking.domain.entities.vo.FlightNumber;
-import org.springframework.cloud.openfeign.FeignClient;
+import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.feign.dto.FlightExternalDto;import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,5 +15,9 @@ public interface FlightClient {
 
     @PostMapping("/api/v1/flights/{flightNumber}/reserve")
     void updateFlightSeats(@PathVariable("flightNumber") String flightNumber, @RequestParam("quantity") int quantity);
+
+    @PostMapping("/api/v1/flights/{flightNumber}/cancel-reserve")
+    void cancelReserve(@PathVariable("flightNumber") String flightNumber, @RequestParam("quantity") Integer quantity);
+
 }
 

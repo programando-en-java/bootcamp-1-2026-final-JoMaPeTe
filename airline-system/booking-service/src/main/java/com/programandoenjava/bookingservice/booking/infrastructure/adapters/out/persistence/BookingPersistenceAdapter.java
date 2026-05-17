@@ -8,7 +8,9 @@ import com.programandoenjava.bookingservice.booking.domain.entities.vo.Passenger
 import com.programandoenjava.bookingservice.booking.domain.port.out.BookingRepositoryPort;
 import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.persistence.entity.BookingEntity;
 import com.programandoenjava.bookingservice.booking.infrastructure.adapters.out.persistence.repository.BookingJpaRepository;
-import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+import java.util.UUID;
 
 
 public class BookingPersistenceAdapter implements BookingRepositoryPort {
@@ -26,7 +28,8 @@ public class BookingPersistenceAdapter implements BookingRepositoryPort {
             booking.getId().value(),
             booking.getFlightNumber().value(),
             booking.getPassengerId().value(),
-            booking.getStatus().name()
+            booking.getStatus().name(),
+                booking.getSeats()
         );
         
         BookingEntity savedEntity = jpaRepository.save(entity);
@@ -36,7 +39,23 @@ public class BookingPersistenceAdapter implements BookingRepositoryPort {
                 new BookingId(savedEntity.getId()),              // Envolvemos el UUID
                 new FlightNumber(savedEntity.getFlightNumber()),  // Envolvemos el String
                 new PassengerId(savedEntity.getPassengerId()),    // Envolvemos el Long
-                BookingStatus.valueOf(savedEntity.getStatus())
+                BookingStatus.valueOf(savedEntity.getStatus()),
+                savedEntity.getSeats()
         );
+    }
+
+    @Override
+    public Optional<Booking> findById(UUID id) {
+        // 1. Buscamos en JPA (devuelve un Optional<BookingEntity>)
+        return jpaRepository.findById(id)
+                // 2. Si lo encuentra, lo mapeamos (traducimos) a la entidad de Dominio
+                .map(entity -> new Booking(
+                        new BookingId(entity.getId()),
+                        new FlightNumber(entity.getFlightNumber()),
+                        new PassengerId(entity.getPassengerId()),
+                        // Usamos el constructor/estado adecuado
+                        BookingStatus.valueOf(entity.getStatus()),
+                        entity.getSeats()
+                ));
     }
 }
