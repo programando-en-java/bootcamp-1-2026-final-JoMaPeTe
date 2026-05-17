@@ -302,3 +302,11 @@ Content-Type: application/json
 "userEmail": "usuario_admin@airline.com",
 "amount": 150.00
 }
+###
+POST http://localhost:8080/api/v1/bookings/218ca048-5b47-464b-a25e-735fbed2e214/pay
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
+Content-Type: application/json
+
+{
+"userEmail": "usuario_admin@airline.com"
+}
