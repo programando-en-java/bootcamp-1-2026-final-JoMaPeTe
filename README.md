@@ -305,10 +305,13 @@ Content-Type: application/json
 "amount": 150.00
 }
 ###
-POST http://localhost:8080/api/v1/bookings/d60a924f-1f2a-4cd9-b4e8-5a86ef94d058/pay
+POST http://localhost:8080/api/v1/bookings/65b03ba1-08b8-4f61-b0cd-f3cb37f02aa1/pay
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTEyOTkwNCwiaWF0IjoxNzc5MDQzNTA0LCJyb2xlcyI6WyJBRE1JTiJdfQ.CmJC76haECpYcgCSMWA2bFGk03FPyGkzEO90_hUrBoM
 Content-Type: application/json
 
 {
 "userEmail": "test@test.com"
 }
+###
+POST http://localhost:8080/api/v1/checkin/16fab3ad-d69a-4479-8862-2d16732ea777
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL21pLWFwaS5jb20iLCJzdWIiOiJ1c3VhcmlvX2FkbWluIiwiaWQiOjIsImV4cCI6MTc3OTE1MDIyMSwiaWF0IjoxNzc5MDYzODIxLCJyb2xlcyI6WyJBRE1JTiJdfQ.fEX93_ZmAtFt8bIrD9aE_FYecOY9vIXgmNez1DK_xVo

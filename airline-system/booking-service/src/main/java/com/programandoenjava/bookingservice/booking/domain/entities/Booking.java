@@ -17,13 +17,22 @@ public class Booking {
         private BookingStatus status;
          private Integer seats;
          private Long totalPrice;
-        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status, Integer seats, Long totalPrice) {
+    private String passengerEmail;
+         public String getPassengerEmail() {
+    return passengerEmail;
+}
+public void setPassengerEmail(String passengerEmail) {
+    this.passengerEmail = passengerEmail;
+}
+
+        public Booking(BookingId id, FlightNumber flightNumber, PassengerId passengerId, BookingStatus status, Integer seats, Long totalPrice, String passengerEmail) {
             this.id = id;
             this.flightNumber = flightNumber;
             this.passengerId = passengerId;
             this.status = status;
             this.seats = seats;
             this.totalPrice = totalPrice;
+            this.passengerEmail = passengerEmail;
         }
 
         // Getters...

@@ -17,13 +17,14 @@ public class BookingEntity {
         this.totalPrice = totalPrice;
     }
 
-    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status, Integer seats, Long totalPrice) {
+    public BookingEntity(UUID id, String flightNumber, Long passengerId, String status, Integer seats, Long totalPrice, String passengerEmail) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.passengerId = passengerId;
         this.status = status;
         this.seats = seats;
         this.totalPrice = totalPrice;
+        this.passengerEmail = passengerEmail;
     }
 
     public UUID getId() {
@@ -74,6 +75,17 @@ public class BookingEntity {
     private Integer seats;
     @Column(name = "total_price")
     private Long totalPrice;
+
+    public String getPassengerEmail() {
+        return passengerEmail;
+    }
+
+    public void setPassengerEmail(String passengerEmail) {
+        this.passengerEmail = passengerEmail;
+    }
+
+    @Column(name = "passenger_email")
+    private String passengerEmail;
     public BookingEntity() {}
 
 }

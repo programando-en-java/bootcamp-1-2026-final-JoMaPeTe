@@ -30,7 +30,8 @@ public class BookingController {
                 booking.getFlightNumber().value(),       // Extraemos el String del vuelo
                 booking.getPassengerId().value(),         // Extraemos el Long del pasajero
                 booking.getStatus().name(),
-                booking.getTotalPrice()
+                booking.getTotalPrice(),
+                request.passengerEmail()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -44,6 +45,23 @@ public class BookingController {
         BookingResponseDto response = bookingService.payBooking(
                 id,
                 paymentRequest
+        );
+
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<BookingResponseDto> getBooking(@PathVariable String id) {
+        // 1. Busca la reserva (usa tu lógica de negocio)
+      Booking booking = bookingService.getBookingById(id);
+
+        // 2. Crea el DTO de respuesta (Copia el mapeo que ya tienes en el createBooking)
+        BookingResponseDto response = new BookingResponseDto(
+                id,
+                booking.getFlightNumber().value(), // O el dato real del dominio
+                booking.getPassengerId().value(),         // O el dato real
+                booking.getStatus().name(),
+                booking.getTotalPrice(),
+                booking.getPassengerEmail()
         );
 
         return ResponseEntity.ok(response);

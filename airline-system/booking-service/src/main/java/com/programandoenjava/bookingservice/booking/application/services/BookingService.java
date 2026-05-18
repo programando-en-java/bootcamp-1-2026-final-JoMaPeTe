@@ -45,7 +45,7 @@ public class BookingService implements CreateBookingUseCase, ApplicationEventPub
         Long pricePerSeat= flightServicePort.getFlightPrice(new FlightNumber(request.flightNumber()));
         Long totalPrice= pricePerSeat*request.seats();
         // Crear la reserva en estado PENDING
-        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING, request.seats(), totalPrice);
+        Booking booking = new Booking(new BookingId(UUID.randomUUID()),new FlightNumber( request.flightNumber()), new PassengerId(request.passengerId()), BookingStatus.PENDING, request.seats(), totalPrice, request.passengerEmail());
 
         // Confirmar reserva de asientos en el otro microservicio
         flightServicePort.reserveSeats(new FlightNumber(request.flightNumber()), request.seats());
@@ -81,7 +81,8 @@ public class BookingService implements CreateBookingUseCase, ApplicationEventPub
                         booking.getFlightNumber().value(),
                         booking.getPassengerId().value(),
                         booking.getStatus().name(),
-                        booking.getTotalPrice()
+                        booking.getTotalPrice(),
+                        paymentRequest.userEmail()
 
                 );
             } else {
@@ -102,5 +103,11 @@ public class BookingService implements CreateBookingUseCase, ApplicationEventPub
             // C. Avisamos al usuario del problema
             throw new RuntimeException("Pago fallido. Reserva cancelada y plazas liberadas. Detalle: " + e.getMessage());
         }
+    }
+
+    public Booking getBookingById(String id) {
+        UUID bookingId = UUID.fromString(id);
+        return bookingRepositoryPort.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
     }
 }

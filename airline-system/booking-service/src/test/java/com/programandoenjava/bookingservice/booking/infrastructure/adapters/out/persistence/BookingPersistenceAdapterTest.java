@@ -39,7 +39,8 @@ class BookingPersistenceAdapterTest {
                 new PassengerId(1L),
                 BookingStatus.PENDING,
                 1,
-                150L
+                150L,
+                "mock@email.com"
         );
 
         BookingEntity entity = new BookingEntity();

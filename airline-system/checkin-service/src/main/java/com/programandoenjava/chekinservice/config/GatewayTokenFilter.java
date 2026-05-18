@@ -1,4 +1,4 @@
-package com.programandoenjava.bookingservice.booking.infrastructure.config;
+package com.programandoenjava.chekinservice.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,8 +52,7 @@ public class GatewayTokenFilter extends OncePerRequestFilter {
         String userId = request.getHeader("X-User-Id");
         String username = request.getHeader("X-Username");
         String userRoles = request.getHeader("X-User-Roles");
-        logger.info("TOKEN RECIBIDO: [{}]", gatewayToken);
-        logger.info("TOKEN ESPERADO: [{}]", gatewayInternalToken);
+
         // ❌ Verifying: ¿Viene del Gateway?
         if (gatewayToken == null) {
             logger.warn("BLOCKED: Missing X-Gateway-Token from {}", request.getRemoteAddr());
@@ -64,7 +63,7 @@ public class GatewayTokenFilter extends OncePerRequestFilter {
         }
 
         // ❌ Verifying: ¿Token es válido?
-        if (!gatewayToken.trim().equals(gatewayInternalToken.trim())) {
+        if (!gatewayToken.equals(gatewayInternalToken)) {
             logger.warn("BLOCKED: Invalid X-Gateway-Token from {}", request.getRemoteAddr());
             sendErrorResponse(response,
                 "Invalid X-Gateway-Token",

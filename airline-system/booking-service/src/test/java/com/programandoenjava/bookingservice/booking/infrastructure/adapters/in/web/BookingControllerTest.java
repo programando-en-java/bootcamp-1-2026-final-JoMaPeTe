@@ -51,7 +51,8 @@ class BookingControllerTest {
                 new PassengerId(1L),                  // Envolvemos el Long
                 BookingStatus.CONFIRMED,
                 2,
-                150L);
+                150L,
+                "mock@email.com");
         given(bookingService.createBooking(any())).willReturn(booking);
 
         BookingRequestDto request = new BookingRequestDto(  "IB123", 1L, "test@test.com",2);
