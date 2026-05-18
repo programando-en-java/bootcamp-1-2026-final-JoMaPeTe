@@ -53,7 +53,7 @@ class BookingServiceTest {
                 new PassengerId(passengerId),
                 BookingStatus.PENDING,
                 request.seats(),
-                150L);
+                150L,"mock@email.com");
 
         // Simulamos que hay asientos (US-004)
         given(flightServicePort.hasAvailableSeats(any(), any(Integer.class))).willReturn(true);
