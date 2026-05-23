@@ -11,7 +11,7 @@ spring:
   security:
     user:
       name: admin
-      password: bootcamp2026
+      password: ${SPRING_SECURITY_USER_PASSWORD}
   sql:
     init:
       mode: always
@@ -58,4 +58,4 @@ management:
 
 gateway:
   internal:
-    token: "SuperSecretGatewayToken2026"
+    token: ${GATEWAY_INTERNAL_TOKEN}

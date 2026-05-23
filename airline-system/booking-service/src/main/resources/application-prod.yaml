@@ -12,7 +12,7 @@ spring:
   datasource:
     # Ahora usamos el puerto 5432 y la BD airline_db definida arriba
     url: jdbc:postgresql://localhost:5432/airline_db
-    username: postgres
-    password: password
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 

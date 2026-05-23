@@ -5,12 +5,12 @@ spring:
     active: dev
 
 jwt:
-  secret: ${JWT_SECRET:Phxo4tDFz9zzoZhFS3+FG7MkLDhKu3QcTRrriN/hStw=}
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 gateway:
   internal:
-    token: "SuperSecretGatewayToken2026"
+    token: ${GATEWAY_INTERNAL_TOKEN}
 ---
 # ==========================================
 # PERFIL DEV: H2 en Memoria + Flyway
@@ -46,7 +46,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bootcamp_db}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
